@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método Simplex Matricial</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  
+  
+    <div>
+       <div class="wave"></div>
+       <div class="wave"></div>
+       <div class="wave"></div>
+    </div>
+  
+  
+  <header>
+    <h1 style="margin: 30px;">Método Simplex Matricial</h1>
+    <button id="reset" class=" btn-pr btn botones" onclick="refreshPage()">Inicio</button>
+  </header>
+
+  <div class="principal">
+
+    <div class="ventana">
+
+      <p id="niteracion"></p>
+      <p class="texto txtfun" hidden>Las casillas reciben valores de estos tipos [2.4, -2.4, 2/4, -2/4, 2, -2] </p>
+      <div id="first">
+
+        <div class="inputs">
+          <div class="input-grupo">
+            <p class="texto">Numero de variables: </p>
+            <input class="inputestilo" id="cantidadVariables" class="cantin" type="number" min="2" required>
+          </div>
+
+          <div class="input-grupo">
+            <p class="texto">Numero de restricciones: </p>
+            <input class="inputestilo" id="cantidadRestricciones" class="cantin" type="number" min="1" required>
+          </div>
+        </div>
+
+        <form>
+          <div class="objetivo" style="margin: 10px;">
+            <div class="radio-grupo">
+              <input type="radio" id="max" name="op" value="Maximización">
+                <label for="max">Maximización</label>
+            </div>
+            <br>
+            <div class="radio-grupo">
+              <input type="radio" id="min" name="op" value="Minimización">
+                <label for="min">Minimización</label><br>
+            </div>
+          </div>
+        </form>
+        <p id="edit"></p>
+        <button class="btn-pr btn botones" onclick="validarPrimerosValores()">Siguiente</button>
+      </div>
+
+      <div id="funcion">
+        <h2 id="funcTittle">Función Objetivo</h2>
+      </div>
+
+      <div id="restricciones">
+        <h2 id="restTittle">Restricciones</h2>
+      </div>
+
+      <h2 id="funcTittle2">Función Objetivo</h2>
+      <div id="msgfuncionobjetivo"></div>
+      <div id="contenedorstandar">
+        <div id="contenedorVectorX">
+          <h2 id="msgvectorx" style="display: none; font-size: 20px;">Vector x</h2>
+          <div id="msgvectorx"></div>
+        </div>
+
+        <div id="ContenedorVectorC">
+          <h2 id="msgvectorc" style="font-size: 20px;display: none; justify-content: center;">Vector C</h2>
+          <div id="msgvectorc"></div>
+        </div>
+
+        <div>
+          <h2 id="msgvectorb" style="font-size: 20px;display: none;">Vector b</h2>
+          <div id="msgvectorb"></div>
+        </div>
+
+      </div>
+
+      <h2 id="restTittle2">Matriz A</h2>
+      <div id="msgrestricciones"></div>
+
+      <div class="container" id="container2">
+        <div id="vectorC" hidden></div>
+
+        <div id="containervectores">
+          <div id="vectorCb"> </div>
+          <div id="vectorXb"></div>
+          <div id="vectorB"></div>
+          <div id="MatrizB"></div>
+          <div id="MatrizBinv"></div>
+          <div class="medio">
+            <div id="matrixYO">
+              <h5 id="msgMatrizA"></h5>
+              <div id="vectorX"></div>
+              <div id="matriz-container"></div>
+
+            </div>
+          </div>
+
+
+          <div id="vectorO"></div>
+        </div>
+        <div id="vectorR"></div>
+      </div>
+
+
+      <div id="resultado">
+        <p id="edit2"></p>
+        <p id="entrasale"></p>
+        <p id="puntodegenerado"></p>
+        <p id="noacotado"></p>
+        <p id="poliedroabierto"></p>
+        <p id="incompatible"></p>
+        <p id="solucionesalternativas"></p>
+
+        <h5 id="msgresultado"></h5>
+        <h5 id="msgresultado2"></h5>
+      </div>
+
+      <button id="resolver" class=" btn-pr btn botones" onclick="validarEntradas()">Resolver</button>
+      <button id="iterar" class=" btn-pr btn botones" onclick="iterar()">Iterar</button>
+      <button id="solucionDirecta" class=" btn-pr btn botones" onclick="solucionDirecta()">Solución directa</button>
+      <button id="info" class="btn2" data-bs-toggle="modal" data-bs-target="#infoModal">Info</button>
+
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.min.js"></script>
+  <script src="prueba.js"></script>
+  <script src="funcionesJS.js"></script>
+  <script src="funciones.js"></script>
+  <script src="main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modal -->
+  <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="infoModalLabel">Guía del Método Simplex</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>El Método Simplex es un algoritmo de optimización lineal que se utiliza para resolver problemas de programación lineal. Fue desarrollado por George Dantzig en 1947. El método trabaja en una serie de pasos iterativos, moviéndose a través de las esquinas de la región factible en busca del óptimo. Los pasos básicos del método simplex son:</p>
+          <ol>
+            <li>Formular el problema de programación lineal.</li>
+            <li>Convertir las desigualdades en ecuaciones introduciendo variables de holgura.</li>
+            <li>Construir la tabla inicial del simplex.</li>
+            <li>Identificar la columna pivote (columna de entrada) y la fila pivote (fila de salida).</li>
+            <li>Realizar las operaciones de pivoteo para encontrar una nueva solución básica factible.</li>
+            <li>Repetir los pasos 4 y 5 hasta que se alcance la solución óptima o se determine que no hay solución factible.</li>
+          </ol>
+          <h3>Detalles del Método Simplex</h3>
+          <p>El método simplex utiliza un enfoque sistemático para examinar los vértices de la región factible de un problema de programación lineal. La idea principal es movernos de un vértice al siguiente, mejorando la solución en cada paso, hasta encontrar la solución óptima.</p>
+          <h4>Pasos del Método Simplex</h4>
+          <ul>
+            <li><strong>Inicialización:</strong> Comenzar con una solución básica factible inicial. Si no se tiene una, se puede utilizar el método de la M grande o el método de dos fases.</li>
+            <li><strong>Condición de Optimalidad:</strong> Verificar si la solución actual es óptima. Esto se hace comprobando los coeficientes de la función objetivo en la tabla simplex.</li>
+            <li><strong>Selección de la Variable de Entrada:</strong> Identificar la variable que entra a la base (variable que mejora la solución actual).</li>
+            <li><strong>Selección de la Variable de Salida:</strong> Determinar cuál variable sale de la base para dejar espacio a la variable de entrada.</li>
+            <li><strong>Actualización:</strong> Realizar el pivoteo para actualizar la tabla simplex y obtener una nueva solución básica factible.</li>
+          </ul>
+          <h4>Ejemplo Práctico</h4>
+          <p>Supongamos que queremos maximizar la función objetivo Z = 3x1 + 2x2 sujeto a las siguientes restricciones:</p>
+          <ul>
+            <li>2x1 + x2 ≤ 18</li>
+            <li>2x1 + 3x2 ≤ 42</li>
+            <li>3x1 + x2 ≤ 24</li>
+            <li>x1, x2 ≥ 0</li>
+          </ul>
+          <p>Pasos para resolverlo:</p>
+          <ol>
+            <li>Convertir las desigualdades en ecuaciones añadiendo variables de holgura (s1, s2, s3).</li>
+            <li>Formar la tabla inicial del simplex.</li>
+            <li>Identificar las columnas y filas pivote y realizar el pivoteo.</li>
+            <li>Repetir el proceso hasta que se alcance la condición de optimalidad.</li>
+          </ol>
+          <p>Este método es ampliamente utilizado en optimización debido a su eficiencia y capacidad para manejar grandes problemas con múltiples restricciones y variables.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</body>
+</html>
