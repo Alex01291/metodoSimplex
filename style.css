@@ -235,7 +235,7 @@ input {
 }
 
 #objetivoFuncion{
-    color: #4d4d4d;
+    color: #464646;
     line-height: 28px;
 }
 #objetivoFuncion{
@@ -289,7 +289,7 @@ input {
     border-radius: 5px;
     padding: 0 20px;
     font-size: 16px;
-    color: #4d4d4d;
+    color: #464646;
 }
 .igualdad{
     margin-inline: 20px;
@@ -337,7 +337,7 @@ input {
     border-radius: 5px;
     padding: 0 20px;
     font-size: 16px;
-    color: #6e6e6e;
+    color: #464646;
 }
 
 #resolver{
